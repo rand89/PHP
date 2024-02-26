@@ -49,9 +49,6 @@ class Database {
             if(in_array($operator, $operators)) {
                 $sql = "{$action} FROM {$table} WHERE {$field} {$operator} ?";
                 $this->query($sql, [$value]);
-                /*if(!$this->query($sql, [$value])->error) {
-                    return $this;
-                }*/
             }
             else $this->error = true;
         }
@@ -79,8 +76,8 @@ class Database {
         }
         $values = rtrim($values, ',');
         $sql = "INSERT INTO {$table} (". '`' . implode('`,`', array_keys($fields)) . '`' . ") VALUES ({$values})";
-        if(!$this->query($sql, $fields)->getError()) {
-            return true;
+        if(!$this->query($sql, $fields)->getError()) {  
+            return $this->pdo->lastInsertId();
         }
 
         return false;

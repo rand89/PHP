@@ -22,7 +22,7 @@ class User {
     }
 
     public function create($fields = []) {
-        $this->db->insert('users', $fields);
+        return $this->db->insert('users', $fields);
     }
 
     public function login($email = null, $password = null, $remember = false) {
@@ -122,7 +122,43 @@ class User {
         return $statuses;
     }
 
-    public function upload_image($image) {
+    public function add_user($email, $password) {
+        $user_id = $this->create([
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        ]);
+        return $user_id;
+    }
+
+    public function edit_data($user_id, $name, $job, $phone, $address) {
+        $this->update([
+            'username' => $name,
+            'job' => $job,
+            'phone' => $phone,
+            'address' => $address
+        ], $user_id);
+    }
+
+    public function edit_security($user_id, $email, $password) {
+        $this->update([
+            'email' => $email,
+            'password' => password_hash($password, PASSWORD_DEFAULT)
+        ], $user_id );
+    }
+
+    public function set_status($user_id, $status) {
+        $this->update(['status' => $status], $user_id );
+    }
+
+    public function add_links($user_id, $vk, $telegram, $instagram) {
+        $this->update([
+            'vk' => $vk,
+            'telegram' => $telegram,
+            'instagram' => $instagram
+        ], $user_id);
+    }
+
+    public function upload_image($user_id, $image) {
         if($image['name'] == "") {
             return '';
         }
@@ -131,7 +167,8 @@ class User {
         $path_info = pathinfo($name);
         $name = uniqid().".".$path_info['extension'];
         move_uploaded_file($image['tmp_name'], $dir.$name);
-        return $dir.$name;
+
+        $this->update(['image' => $dir.$name], $user_id );
     }
 
     public function delete_image() {

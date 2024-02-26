@@ -18,22 +18,7 @@ if(Input::exists()) {
 
         if($validation->passed()) {
             $user = new User;
-            $user->create([
-                'email' => Input::get('email'),
-                'password' => password_hash(Input::get('password'), PASSWORD_DEFAULT),
-                'username' => "",
-                'job' => "",
-                'status' => "success",
-                'image' => "",
-                'phone' => "",
-                'address' => "",
-                'vk' => "",
-                'telegram' => "",
-                'instagram' => "",
-                'tags' => "",
-                'role' => "user"
-            ]);
-
+            $user_id = $user->add_user(Input::get('email'), Input::get('password'));
             Session::flash("success", "Регистрация успешна");
             Redirect::to("page_login.php");
         }

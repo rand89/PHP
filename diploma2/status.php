@@ -11,9 +11,7 @@ if(Input::exists()) {
         $user_id = Input::get('user_id');
         if($validation->passed()) {
             $user = new User();
-            $user->update([
-                'status' => Input::get('status')
-            ], $user_id );
+            $user->set_status($user_id, Input::get('status'));
             Session::flash("success", "Профиль успешно обновлен.");
             Redirect::to("page_profile.php?id={$user_id}");  
         }

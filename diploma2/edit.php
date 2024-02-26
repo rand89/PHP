@@ -17,12 +17,7 @@ if(Input::exists()) {
         $user_id = Input::get('user_id');
         if($validation->passed()) {
             $user = new User();
-            $user->update([
-                'username' => Input::get('username'),
-                'job' => Input::get('job'),
-                'phone' => Input::get('phone'),
-                'address' => Input::get('address')
-            ], $user_id );
+            $user->edit_data($user_id, Input::get('username'), Input::get('job'), Input::get('phone'), Input::get('address'));
             Session::flash("success", "Профиль успешно обновлен.");
             Redirect::to("page_profile.php?id={$user_id}");  
         }

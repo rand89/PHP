@@ -12,9 +12,7 @@ if(Input::exists()) {
         if($validation->passed()) {
             $user = new User($user_id);
             $user->delete_image();
-            $user->update([
-                'image' => $user->upload_image(Input::get('image'))
-            ], $user_id );
+            $user->upload_image($user_id, Input::get('image'));
             Session::flash("success", "Профиль успешно обновлен.");
             Redirect::to("page_profile.php?id={$user_id}");  
         }

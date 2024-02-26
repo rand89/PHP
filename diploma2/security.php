@@ -29,10 +29,7 @@ if(Input::exists()) {
                 Redirect::to("page_security.php?id={$user_id}");
             }
 
-            $user->update([
-                'email' => Input::get('email'),
-                'password' => password_hash(Input::get('password'), PASSWORD_DEFAULT)
-            ], $user_id );
+            $user->edit_security($user_id, Input::get('email'), Input::get('password'));
             Session::flash("success", "Профиль успешно обновлен.");
             Redirect::to("page_profile.php?id={$user_id}");  
         }

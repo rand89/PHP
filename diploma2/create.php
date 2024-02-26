@@ -25,21 +25,11 @@ if(Input::exists()) {
 
         if($validation->passed()) {
             $user = new User;
-            $user->create([
-                'email' => Input::get('email'),
-                'password' => password_hash(Input::get('password'), PASSWORD_DEFAULT),
-                'username' => Input::get('username'),
-                'job' => Input::get('job'),
-                'status' => Input::get('status'),
-                'image' => $user->upload_image(Input::get('image')),
-                'phone' => Input::get('phone'),
-                'address' => Input::get('address'),
-                'vk' => Input::get('vk'),
-                'telegram' => Input::get('telegram'),
-                'instagram' => Input::get('instagram'),
-                'tags' => "",
-                'role' => "user"
-            ]);
+            $user_id = $user->add_user(Input::get('email'), Input::get('password'));
+            $user->edit_data($user_id, Input::get('username'), Input::get('job'), Input::get('phone'), Input::get('address'));
+            $user->set_status($user_id, Input::get('status'));
+            $user->upload_image($user_id, Input::get('image'));
+            $user->add_links($user_id, Input::get('vk'), Input::get('telegram'), Input::get('instagram'));
 
             Session::flash("success", "Пользователь добавлен.");
             Redirect::to("users.php");
